@@ -1,0 +1,14 @@
+{
+  "name": "prithvinet",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart Environmental Monitoring & Compliance Platform for Air, Water & Noise",
+  "scripts": {
+    "dev": "concurrently -n frontend,backend,ml -c blue,green,yellow \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\" \"cd ml-service && uvicorn app.main:app --reload --port 8000\"",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "lint": "npm run lint --prefix frontend && npm run lint --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
