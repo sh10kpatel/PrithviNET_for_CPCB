@@ -14,7 +14,7 @@
 ## App Router Structure
 
 ```
-client/app/
+frontend/app/
 ├── layout.tsx              # Root layout: font, Tailwind, Providers wrapper
 ├── providers.tsx           # QueryClientProvider, SocketProvider, AuthProvider
 ├── (auth)/
@@ -44,7 +44,7 @@ client/app/
 ### Providers Setup
 
 ```tsx
-// client/app/providers.tsx
+// frontend/app/providers.tsx
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/hooks/useAuth";
@@ -72,7 +72,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 ### Role Guard
 
 ```tsx
-// client/components/RoleGuard.tsx
+// frontend/components/RoleGuard.tsx
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 import { redirect } from "next/navigation";
@@ -97,7 +97,7 @@ export function RoleGuard({ children }: { children: React.ReactNode }) {
 ### Socket.IO Hook
 
 ```tsx
-// client/hooks/useSocket.ts
+// frontend/hooks/useSocket.ts
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
@@ -134,7 +134,7 @@ export function useSocketEvent<T>(event: string, handler: (data: T) => void) {
 ### API Client
 
 ```typescript
-// client/lib/api.ts
+// frontend/lib/api.ts
 const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -169,7 +169,7 @@ export const api = {
 Leaflet requires `ssr: false` in Next.js because it accesses `window`.
 
 ```tsx
-// client/components/maps/HeatMap.tsx
+// frontend/components/maps/HeatMap.tsx
 "use client";
 import dynamic from "next/dynamic";
 
@@ -182,7 +182,7 @@ export function HeatMap(props: HeatMapProps) {
 ```
 
 ```tsx
-// client/components/maps/HeatMapInner.tsx
+// frontend/components/maps/HeatMapInner.tsx
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -242,7 +242,7 @@ import { WMSTileLayer } from "react-leaflet";
 Station markers use CPCB AQI breakpoint colors (not just dots):
 
 ```tsx
-// client/components/maps/StationMarker.tsx
+// frontend/components/maps/StationMarker.tsx
 import { CircleMarker, Popup } from "react-leaflet";
 
 const AQI_COLORS: Record<string, string> = {
@@ -298,7 +298,7 @@ export function StationMarker({ lat, lng, name, aqi, isLive }: StationMarkerProp
 ## Recharts Forecast Chart (with confidence bands)
 
 ```tsx
-// client/components/charts/ForecastChart.tsx
+// frontend/components/charts/ForecastChart.tsx
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Line } from "recharts";
 
 interface ForecastPoint {

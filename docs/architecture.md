@@ -21,7 +21,7 @@
 │       │            │          │            │                 │
 │  ┌────▼────────────▼──────────▼────────────▼──┐             │
 │  │              SQLite (Knex)                  │             │
-│  │       ./server/data/prithvinet.db           │             │
+│  │       ./backend/data/prithvinet.db          │             │
 │  └─────────────────────────────────────────────┘             │
 │                          │ internal HTTP                     │
 │              ┌───────────▼────────────────┐                  │
@@ -212,9 +212,9 @@ Client ──POST /api/copilot/query { question }──▶ Express
 PrithviNET/
 ├── AGENTS.md
 ├── package.json              # root: concurrently scripts
-├── skills/
+├── docs/
 │
-├── client/                   # Next.js 14 App Router
+├── frontend/                 # Next.js 14 App Router
 │   ├── app/
 │   │   ├── (auth)/           # Login, Register (no layout chrome)
 │   │   ├── (protected)/      # Role-gated pages
@@ -239,7 +239,7 @@ PrithviNET/
 │   ├── lib/                  # api.ts, socket.ts, utils.ts
 │   └── types/
 │
-├── server/                   # Express + TypeScript
+├── backend/                  # Express + TypeScript
 │   ├── src/
 │   │   ├── routes/           # auth, regions, industries, locations,
 │   │   │                     # parameters, limits, readings, alerts,
@@ -270,26 +270,26 @@ PrithviNET/
 ## Environment Variables
 
 ```env
-# server/.env
+# backend/.env
 PORT=4000
 JWT_SECRET=<random-256-bit-hex>
 DB_PATH=./data/prithvinet.db
 ML_SERVICE_URL=http://localhost:8000
 GEMINI_API_KEY=<key>
 
-# client/.env.local
+# frontend/.env.local
 NEXT_PUBLIC_API_URL=http://localhost:4000
 NEXT_PUBLIC_WS_URL=http://localhost:4000
 
 # ml-service/.env
 GEMINI_API_KEY=<key>
-DB_PATH=../server/data/prithvinet.db
+DB_PATH=../backend/data/prithvinet.db
 ```
 
 ## Port Assignments
 
 | Service | Port | Purpose |
 |---|---|---|
-| Next.js client | 3000 | Frontend UI |
+| Next.js frontend | 3000 | Frontend UI |
 | Express API | 4000 | REST + WebSocket gateway |
 | FastAPI ML | 8000 | Internal ML endpoints |

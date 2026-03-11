@@ -5,7 +5,7 @@
 ## Express App Structure
 
 ```typescript
-// server/src/app.ts — factory pattern
+// backend/src/app.ts — factory pattern
 import express from "express";
 import cors from "cors";
 import { authRouter } from "./routes/auth";
@@ -54,7 +54,7 @@ cors → json → authenticate → authorize(roles) → validate(schema) → han
 ### Auth Middleware (JWT)
 
 ```typescript
-// server/src/middleware/auth.ts
+// backend/src/middleware/auth.ts
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 
@@ -79,7 +79,7 @@ export function authenticate(req: AuthRequest, res: Response, next: NextFunction
 ### RBAC Middleware
 
 ```typescript
-// server/src/middleware/rbac.ts
+// backend/src/middleware/rbac.ts
 type Role = "super_admin" | "regional_officer" | "monitoring_team" | "industry_user" | "citizen";
 
 export function authorize(...allowed: Role[]) {
@@ -106,7 +106,7 @@ export function authorize(...allowed: Role[]) {
 ### Validation Middleware (Zod)
 
 ```typescript
-// server/src/middleware/validate.ts
+// backend/src/middleware/validate.ts
 import { z, ZodSchema } from "zod";
 
 export function validate(schema: ZodSchema) {
@@ -128,7 +128,7 @@ export function validate(schema: ZodSchema) {
 ### Error Handler
 
 ```typescript
-// server/src/middleware/errorHandler.ts
+// backend/src/middleware/errorHandler.ts
 export function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction) {
   console.error(`[${req.method} ${req.path}]`, err.message, err.stack);
   const status = (err as any).status || 500;
@@ -144,7 +144,7 @@ export function errorHandler(err: Error, req: Request, res: Response, _next: Nex
 Wrap all async route handlers to avoid unhandled promise rejections:
 
 ```typescript
-// server/src/utils/asyncHandler.ts
+// backend/src/utils/asyncHandler.ts
 import type { Request, Response, NextFunction } from "express";
 
 export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
@@ -154,7 +154,7 @@ export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunctio
 ## Key Zod Schemas
 
 ```typescript
-// server/src/routes/schemas.ts
+// backend/src/routes/schemas.ts
 import { z } from "zod";
 
 export const ReadingInput = z.object({
@@ -190,7 +190,7 @@ export const CopilotQuery = z.object({
 The alert engine runs synchronously on every new reading batch. It is the core compliance mechanism.
 
 ```typescript
-// server/src/services/alertEngine.ts
+// backend/src/services/alertEngine.ts
 import { db } from "../db/connection";
 import { io } from "../socket";
 
@@ -244,7 +244,7 @@ function evaluateRule(value: number, op: string, threshold: number): boolean {
 ## WebSocket Events
 
 ```typescript
-// server/src/socket.ts
+// backend/src/socket.ts
 import { Server } from "socket.io";
 import type { Server as HTTPServer } from "http";
 
@@ -275,7 +275,7 @@ export function initSocket(httpServer: HTTPServer) {
 Express proxies all ML requests through a centralized client:
 
 ```typescript
-// server/src/services/mlClient.ts
+// backend/src/services/mlClient.ts
 const ML_URL = process.env.ML_SERVICE_URL || "http://localhost:8000";
 
 export async function getForecast(locationId: number, paramId: number, hours: number) {
@@ -310,7 +310,7 @@ export async function queryCopilot(question: string, context: Record<string, unk
 The Express server acts as the sole proxy for CPCB API data. The frontend never calls CPCB directly.
 
 ```typescript
-// server/src/services/cpcbClient.ts
+// backend/src/services/cpcbClient.ts
 const CPCB_BASE = "https://airquality.cpcb.gov.in";
 
 function makeAccessToken(): string {
@@ -367,7 +367,7 @@ export async function fetchStationReadings(
 ### CPCB Polling Strategy
 
 ```typescript
-// server/src/services/cpcbPoller.ts
+// backend/src/services/cpcbPoller.ts
 // Runs as a cron job: priority stations every 15 min, others every 1-6h
 // Max 2 requests/second to avoid CAPTCHA
 // On HTTP 400 (CAPTCHA): exponential backoff starting at 5 min

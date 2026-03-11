@@ -3,24 +3,24 @@
 Smart Environmental Monitoring & Compliance Platform for Air, Water & Noise.
 Three-service architecture: Next.js frontend, Express+TypeScript API, Python FastAPI ML service.
 
-> For deeper guidance on each subsystem, see the `skills/` directory.
+> For deeper guidance on each subsystem, see the `docs/` directory.
 
 ## Project Structure
 
 ```
 PrithviNET/
-  client/          # Next.js 14 (App Router) + TypeScript
-  server/          # Express + TypeScript API + Socket.IO
+  frontend/        # Next.js 14 (App Router) + TypeScript
+  backend/         # Express + TypeScript API + Socket.IO
   ml-service/      # Python FastAPI (forecasting, anomaly detection, copilot)
-  skills/          # Detailed agent skill files per subsystem
+  docs/            # Detailed architecture & skill files per subsystem
 ```
 
 ## Build / Dev / Lint / Test Commands
 
-### Client (Next.js) — runs on port 3000
+### Frontend (Next.js) — runs on port 3000
 
 ```bash
-cd client
+cd frontend
 npm install
 npm run dev          # Start dev server
 npm run build        # Production build
@@ -29,10 +29,10 @@ npx prettier --check "src/**/*.{ts,tsx}"   # Format check
 npx prettier --write "src/**/*.{ts,tsx}"   # Format fix
 ```
 
-### Server (Express) — runs on port 4000
+### Backend (Express) — runs on port 4000
 
 ```bash
-cd server
+cd backend
 npm install
 npm run dev          # ts-node-dev / nodemon
 npm run build        # tsc
@@ -55,14 +55,14 @@ ruff format app/                               # Format
 ### Running Tests
 
 ```bash
-# --- Client (Vitest + React Testing Library) ---
-cd client
+# --- Frontend (Vitest + React Testing Library) ---
+cd frontend
 npx vitest run                                 # All tests
 npx vitest run src/components/HeatMap.test.tsx  # Single test file
 npx vitest run -t "renders markers"            # Single test by name
 
-# --- Server (Vitest + Supertest) ---
-cd server
+# --- Backend (Vitest + Supertest) ---
+cd backend
 npx vitest run                                 # All tests
 npx vitest run src/routes/readings.test.ts     # Single test file
 npx vitest run -t "returns 403 for citizen"    # Single test by name
@@ -82,7 +82,7 @@ pytest -k "anomaly"                            # Tests matching keyword
 npm run dev          # Starts all three services
 ```
 
-## Code Style — TypeScript (client + server)
+## Code Style — TypeScript (frontend + backend)
 
 ### Imports
 
@@ -162,36 +162,36 @@ import { AlertEngine } from "./alertEngine";
 - Express calls ml-service internally via HTTP (`http://localhost:8000/ml/...`)
 - All sensor readings (IoT, manual, API) flow through the same `POST /api/readings` pipeline
 - The alert engine runs synchronously on every new reading batch
-- WebSocket events are emitted from the server only; clients are consumers
+- WebSocket events are emitted from the backend only; frontend clients are consumers
 - SQLite is the single source of truth; ml-service reads from it or receives data via Express
 - Role-based access is enforced at the Express middleware layer, not in the frontend
 
 ## Environment Variables
 
 ```env
-# server/.env
+# backend/.env
 PORT=4000
 JWT_SECRET=<random-256-bit>
 DB_PATH=./data/prithvinet.db
 ML_SERVICE_URL=http://localhost:8000
 GEMINI_API_KEY=<your-key>
 
-# client/.env.local
+# frontend/.env.local
 NEXT_PUBLIC_API_URL=http://localhost:4000
 NEXT_PUBLIC_WS_URL=http://localhost:4000
 
 # ml-service/.env
 GEMINI_API_KEY=<your-key>
-DB_PATH=../server/data/prithvinet.db
+DB_PATH=../backend/data/prithvinet.db
 ```
 
-## Skill Files Reference
+## Docs Reference
 
 | File | Covers |
 |---|---|
-| `skills/architecture.md` | System design, service communication, data flow diagrams |
-| `skills/database.md` | 14-table schema, Knex migrations, CPCB seed data |
-| `skills/backend-api.md` | Express routes, RBAC, alert engine, WebSocket events |
-| `skills/frontend.md` | Next.js patterns, Leaflet maps, Recharts, role routing |
-| `skills/ml-service.md` | Prophet forecasting, anomaly detection, Gemini copilot |
-| `skills/iot-simulator.md` | Realistic sensor stream generation |
+| `docs/architecture.md` | System design, service communication, data flow diagrams |
+| `docs/database.md` | 15-table schema, Knex migrations, CPCB seed data |
+| `docs/backend-api.md` | Express routes, RBAC, alert engine, WebSocket events |
+| `docs/frontend.md` | Next.js patterns, Leaflet maps, Recharts, role routing |
+| `docs/ml-service.md` | Prophet forecasting, anomaly detection, Gemini copilot |
+| `docs/iot-simulator.md` | Realistic sensor stream generation |

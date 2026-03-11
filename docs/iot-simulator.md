@@ -68,7 +68,7 @@ const BASELINES: Record<string, { industrial: number; residential: number; ambie
 ## Implementation
 
 ```typescript
-// server/src/simulator/iotSimulator.ts
+// backend/src/simulator/iotSimulator.ts
 import cron from "node-cron";
 import { db } from "../db/connection";
 import { io } from "../socket";
@@ -209,7 +209,7 @@ SIMULATOR_INTERVAL_MS=3000
 ## Testing
 
 ```bash
-cd server
+cd backend
 npx vitest run src/simulator/iotSimulator.test.ts
 ```
 

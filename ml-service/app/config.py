@@ -12,7 +12,7 @@ class Settings:
     """Application settings loaded from environment variables."""
 
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    DB_PATH: str = os.getenv("DB_PATH", "../server/data/prithvinet.db")
+    DB_PATH: str = os.getenv("DB_PATH", "../backend/data/prithvinet.db")
     HOST: str = os.getenv("HOST", "0.0.0.0")
     PORT: int = int(os.getenv("PORT", "8000"))
 

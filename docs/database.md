@@ -246,10 +246,10 @@ CREATE TABLE anomaly_flags (
 - File naming: `YYYYMMDDHHMMSS_descriptive_name.ts` (Knex auto-generates timestamp prefix)
 - One migration per logical unit (e.g., `create_users_table`, `create_readings_indexes`)
 - Always implement both `up()` and `down()`
-- Run: `cd server && npm run migrate`
+- Run: `cd backend && npm run migrate`
 
 ```typescript
-// Example: server/src/db/migrations/20260101000001_create_users.ts
+// Example: backend/src/db/migrations/20260101000001_create_users.ts
 import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
@@ -272,7 +272,7 @@ export async function down(knex: Knex): Promise<void> {
 
 ## Seed Data — CPCB Standards (India)
 
-Seeds must include realistic Indian environmental data. Run: `cd server && npm run seed`
+Seeds must include realistic Indian environmental data. Run: `cd backend && npm run seed`
 
 ### Regional Offices (sample)
 
